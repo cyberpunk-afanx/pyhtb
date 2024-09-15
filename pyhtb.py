@@ -12,8 +12,8 @@ def banner():
  |_|\_\__/|_|\_|/_/ \__/|_|_\ |_| 
                                     author:  AFANX
                                     pylib:   pyhtb
-                                    K0N70R4: https://t.me/k0n70r4
-                                    github: 
+                                    K0N70R4: https://t.me/k0n70r4/
+                                    github:  https://github.com/cyberpunk-afanx/pyhtb/
           ''')
     
 
