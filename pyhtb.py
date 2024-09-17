@@ -26,41 +26,65 @@ def error(msg):
 def success(msg):
     print("[+] " + str(msg))
 
-def send(payload, method=None,cookie=None):
+def send(payload, method=None,cookie=None, headers=None):
     info(payload)
     if(method is None):
         if(cookie is None):
-            response = requests.get(payload)
-            info(response.status_code)
-            return response
+            if(headers is None):
+                response = requests.get(payload)
+                info(response.status_code)
+                return response
+            else:
+                response = requests.get(payload, headers = headers)
+                info(response.status_code)
+                return response
         else:
-            cookies = {}
-            cookies[cookie.split(":")[0]] = cookie.split(":")[1]
-            response = requests.get(payload, cookies=cookies)
-            info(response.status_code)
-            return response
+            if(headers is None):
+                response = requests.get(payload, cookies=cookies)
+                info(response.status_code)
+                return response
+            else:
+                response = requests.get(payload, cookies=cookies,headers=he)
+                info(response.status_code)
+                return response   
     elif(method == "POST"):
         if(cookie is None):
-            response = requests.post(payload)
-            info(response.status_code)
-            return response
+            if(headers is None):
+                response = requests.post(payload)
+                info(response.status_code)
+                return response
+            else:
+                response = requests.post(payload, headers = headers)
+                info(response.status_code)
+                return response
         else:
-            cookies = {}
-            cookies[cookie.split(":")[0]] = cookie.split(":")[1]
-            response = requests.post(payload, cookies=cookies)
-            info(response.status_code)
-            return response
+            if(headers is None):
+                response = requests.post(payload, cookies=cookies)
+                info(response.status_code)
+                return response
+            else:
+                response = requests.post(payload, cookies=cookies,headers=he)
+                info(response.status_code)
+                return response  
     elif(method == "PUT"):
         if(cookie is None):
-            response = requests.put(payload)
-            info(response.status_code)
-            return response
+            if(headers is None):
+                response = requests.put(payload)
+                info(response.status_code)
+                return response
+            else:
+                response = requests.put(payload, headers = headers)
+                info(response.status_code)
+                return response
         else:
-            cookies = {}
-            cookies[cookie.split(":")[0]] = cookie.split(":")[1]
-            response = requests.put(payload, cookies=cookies)
-            info(response.status_code)
-            return response
+            if(headers is None):
+                response = requests.put(payload, cookies=cookies)
+                info(response.status_code)
+                return response
+            else:
+                response = requests.put(payload, cookies=cookies,headers=he)
+                info(response.status_code)
+                return response  
 
 def recv_code(url, cookie=None):
     if(cookie is None):
@@ -79,10 +103,10 @@ def recv_cookies(url, domain):
     found = ['%s=%s' % (name, value) for (name, value) in cookie_dict.items()]
     return ':'.join(found[0].split("="))
 
-def url_encode(str_payload):
-    url_encode_result = "+"
+def url_encode(str_payload, padding="+"):
+    url_encode_result = ""
     for i in str_payload.split(" "):
-        url_encode_result += i + '+'
+        url_encode_result += i + padding
     return url_encode_result[:len(url_encode_result)-1]
 
 def response_time(time1, time2):
