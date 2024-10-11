@@ -3,6 +3,7 @@ import requests
 import time
 import codecs
 import base64
+import urllib.parse
 
 def banner():
     print('''
@@ -40,11 +41,11 @@ def send(payload, method=None,cookie=None, headers=None):
                 return response
         else:
             if(headers is None):
-                response = requests.get(payload, cookies=cookies)
+                response = requests.get(payload, cookies=cookie)
                 info(response.status_code)
                 return response
             else:
-                response = requests.get(payload, cookies=cookies,headers=he)
+                response = requests.get(payload, cookies=cookie,headers=headers)
                 info(response.status_code)
                 return response   
     elif(method == "POST"):
@@ -59,11 +60,11 @@ def send(payload, method=None,cookie=None, headers=None):
                 return response
         else:
             if(headers is None):
-                response = requests.post(payload, cookies=cookies)
+                response = requests.post(payload, cookies=cookie)
                 info(response.status_code)
                 return response
             else:
-                response = requests.post(payload, cookies=cookies,headers=he)
+                response = requests.post(payload, cookies=cookie,headers=headers)
                 info(response.status_code)
                 return response  
     elif(method == "PUT"):
@@ -78,11 +79,11 @@ def send(payload, method=None,cookie=None, headers=None):
                 return response
         else:
             if(headers is None):
-                response = requests.put(payload, cookies=cookies)
+                response = requests.put(payload, cookies=cookie)
                 info(response.status_code)
                 return response
             else:
-                response = requests.put(payload, cookies=cookies,headers=he)
+                response = requests.put(payload, cookies=cookie,headers=headers)
                 info(response.status_code)
                 return response  
 
@@ -103,11 +104,14 @@ def recv_cookies(url, domain):
     found = ['%s=%s' % (name, value) for (name, value) in cookie_dict.items()]
     return ':'.join(found[0].split("="))
 
-def url_encode(str_payload, padding="+"):
+def simple_url_encode(str_payload, padding="+"):
     url_encode_result = ""
     for i in str_payload.split(" "):
         url_encode_result += i + padding
     return url_encode_result[:len(url_encode_result)-1]
+
+def url_encode(str_payload):
+    return urllib.parse.quote(str_payload)
 
 def response_time(time1, time2):
     return (int(time2.split(" ")[1].split(":")[2]) - int(time1.split(" ")[1].split(":")[2]))
@@ -200,3 +204,14 @@ def what_web(url):
     info(f'Server: {server}')
     info(f'Server Version: {server_version}')
     return cms, version, server, server_version
+
+def parse_respose(response, tag=None):
+    soup = BeautifulSoup(response.text, "html.parser")
+    
+    if(tag is None):
+        return soup.prettify()
+    else:
+        fields = []
+        for i in soup.find_all(tag):
+            fields.append(i.text)
+        return fields
